@@ -14,12 +14,12 @@ jobs:
         sudo apt update
         sudo apt-get install -y python3-setuptools ninja-build gcovr libubsan1 #clang-tools-6.0
         sudo pip3 install meson
-    #- name: Clang build and test
-        #CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
-        #ninja -C clang_build test
+    - name: Clang test
+        CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
+        ninja -C clang_build test
     #- name: Scan build
         #ninja -C clang_build scan-build # this uses gcc due to a bug: https://github.com/mesonbuild/meson/issues/5716
-    - name: GCC build and test
+    - name: GCC test
         CC=gcc CXX=g++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_coverage=true gcc_build
         cd gcc_build
         ninja
