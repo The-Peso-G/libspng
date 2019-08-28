@@ -12,12 +12,14 @@ jobs:
     - name: Build and run tests
       run: |
         sudo apt update
-        #sudo apt upgrade -y
         sudo apt-get install -y python3-setuptools ninja-build gcovr libubsan1 #clang-tools-6.0
         sudo pip3 install meson
+    #- name: Clang build and test
         #CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
         #ninja -C clang_build test
+    #- name: Scan build
         #ninja -C clang_build scan-build # this uses gcc due to a bug: https://github.com/mesonbuild/meson/issues/5716
+    - name: GCC build and test
         CC=gcc CXX=g++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_coverage=true gcc_build
         cd gcc_build
         ninja
@@ -32,14 +34,16 @@ jobs:
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         
-#    - name: Coverity build
-#      run: |
-        #wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=randy408%2Flibspng" -O coverity_tool.tgz
+    - name: Coverity build
+      run: |
+      with:
+        token: ${{secrets.COVERITY_TOKEN}}
+        wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=randy408%2Flibspng" -O coverity_tool.tgz
         #mkdir coverity_tool
-        #tar -xvzf coverity_tool.tgz -C coverity_tool --strip-components=1
-        #ninja -C gcc_build clean
-        #./coverity_tool/bin/cov-build --dir cov-int ninja -C gcc_build
-        #tar czvf spng.tgz cov-int
-        #curl --form token=$COVERITY_TOKEN --form file=@spng.tgz --form version="master" --form description="libspng" https://scan.coverity.com/builds?project=randy408%2Flibspng
+        tar -xvzf coverity_tool.tgz -C coverity_tool --strip-components=1
+        ninja -C gcc_build clean
+        ./coverity_tool/bin/cov-build --dir cov-int ninja -C gcc_build
+        tar czvf spng.tgz cov-int
+        curl --form token=$COVERITY_TOKEN --form file=@spng.tgz --form version="master" --form description="libspng" https://scan.coverity.com/builds?project=randy408%2Flibspng
         #rm spng.tgz
         #rm -r cov-int
