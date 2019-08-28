@@ -26,7 +26,7 @@ jobs:
     - name: Generate coverage report
       run: |
         ninja -C gcc_build coverage-text
-        cat meson-logs/coverage.txt
+        cat gcc_build/meson-logs/coverage.txt
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.0.2
       with:
