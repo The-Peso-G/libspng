@@ -15,10 +15,10 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade -y
-        sudo apt-get install -y meson ninja-build gcovr clang-tools-6.0 libubsan1
-        CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
-        ninja -C clang_build test
-        ninja -C clang_build scan-build # this uses gcc due to a bug: https://github.com/mesonbuild/meson/issues/5716
+        sudo apt-get install -y meson ninja-build gcovr libubsan1 #clang-tools-6.0
+        #CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
+        #ninja -C clang_build test
+        #ninja -C clang_build scan-build # this uses gcc due to a bug: https://github.com/mesonbuild/meson/issues/5716
         CC=gcc CXX=g++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_coverage=true gcc_build
         cd gcc_build
         ninja
