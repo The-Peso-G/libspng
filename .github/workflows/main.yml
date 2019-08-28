@@ -9,9 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
+    - name: Build and run tests
       run: |
         sudo apt update
         sudo apt upgrade -y
@@ -24,17 +22,24 @@ jobs:
         ninja
         meson test info -v
         ninja test
+    - name: Generate coverage report
+      run: |
         ninja coverage-text
         cat meson-logs/coverage.txt
-        cd ..
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.0.2
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        
+        #cd ..
         #bash <(curl -s https://codecov.io/bash)
         
-        wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=randy408%2Flibspng" -O coverity_tool.tgz
-        mkdir coverity_tool
-        tar -xvzf coverity_tool.tgz -C coverity_tool --strip-components=1
-        ninja -C gcc_build clean
-        ./coverity_tool/bin/cov-build --dir cov-int ninja -C gcc_build
-        tar czvf spng.tgz cov-int
-        curl --form token=$COVERITY_TOKEN --form file=@spng.tgz --form version="master" --form description="libspng" https://scan.coverity.com/builds?project=randy408%2Flibspng
-        rm spng.tgz
-        rm -r cov-int
+        #wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=randy408%2Flibspng" -O coverity_tool.tgz
+        #mkdir coverity_tool
+        #tar -xvzf coverity_tool.tgz -C coverity_tool --strip-components=1
+        #ninja -C gcc_build clean
+        #./coverity_tool/bin/cov-build --dir cov-int ninja -C gcc_build
+        #tar czvf spng.tgz cov-int
+        #curl --form token=$COVERITY_TOKEN --form file=@spng.tgz --form version="master" --form description="libspng" https://scan.coverity.com/builds?project=randy408%2Flibspng
+        #rm spng.tgz
+        #rm -r cov-int
