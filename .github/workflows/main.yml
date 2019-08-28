@@ -14,6 +14,7 @@ jobs:
     - name: Run a multi-line script
       run: |
         sudo apt update
+        sudo apt upgrade -y
         sudo apt -y -f install meson ninja-build gcovr clang-tools-6.0 libubsan1
         CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
         ninja -C clang_build test
