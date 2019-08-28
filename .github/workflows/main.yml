@@ -26,15 +26,14 @@ jobs:
     - name: Generate coverage report
       run: |
         ninja -C gcc_build coverage-text
-        #cat meson-logs/coverage.txt
+        cat meson-logs/coverage.txt
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1.0.2
       with:
         token: ${{secrets.CODECOV_TOKEN}}
         
-        #cd ..
-        #bash <(curl -s https://codecov.io/bash)
-        
+#    - name: Coverity build
+#      run: |
         #wget https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=randy408%2Flibspng" -O coverity_tool.tgz
         #mkdir coverity_tool
         #tar -xvzf coverity_tool.tgz -C coverity_tool --strip-components=1
