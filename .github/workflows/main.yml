@@ -12,8 +12,8 @@ jobs:
     - name: Build and run tests
       run: |
         sudo apt update
-        sudo apt upgrade -y
-        sudo apt-get install -y ninja-build gcovr libubsan1 #clang-tools-6.0
+        #sudo apt upgrade -y
+        sudo apt-get install -y python3-setuptools ninja-build gcovr libubsan1 #clang-tools-6.0
         pip3 install meson
         #CC=clang CXX=clang++ meson -Ddev_build=true -Db_sanitize=address,undefined -Db_lundef=false clang_build
         #ninja -C clang_build test
